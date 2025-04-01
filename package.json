@@ -1,0 +1,15 @@
+{
+  "name": "playwright-webkit-iframe-cookie-issue",
+  "version": "1.0.0",
+  "description": "Minimal reproduction of WebKit 18.4 iframe cookie access issue where cookies are visible in HTTP requests but not via document.cookie",
+  "scripts": {
+    "test": "playwright test",
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.1"
+  }
+}

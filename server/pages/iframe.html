@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iframe Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Iframe Page</h1>
+    <div class="result" id="cookieResult">
+        document.cookie status: Checking...
+    </div>
+    <div class="result" id="apiResult">
+        API request cookie status: Checking...
+    </div>
+
+    <script>
+        // Check document.cookie
+        const cookieResult = document.getElementById('cookieResult');
+        const hasCookie = document.cookie.includes('testCookie');
+        cookieResult.textContent = `document.cookie status: ${hasCookie ? 'Cookie is present' : 'Cookie is not present'}`;
+
+        // Check cookie in API request
+        const apiResult = document.getElementById('apiResult');
+        fetch('/api/check-cookie')
+            .then(response => response.json())
+            .then(data => {
+                apiResult.textContent = `API request cookie status: ${data.cookiePresent ? 'Cookie is present in request' : 'Cookie is not present in request'}`;
+
+                // Send results back to parent
+                window.parent.postMessage({
+                    type: 'cookieCheck',
+                    documentCookie: hasCookie,
+                    apiCookie: data.cookiePresent
+                }, 'http://example.test');
+            })
+            .catch(error => {
+                apiResult.textContent = `API request failed: ${error.message}`;
+            });
+    </script>
+</body>
+</html>

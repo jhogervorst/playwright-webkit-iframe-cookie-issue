@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .result { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Parent Page</h1>
+    <div class="result" id="parentCookieResult">
+        Parent page cookie status: Checking...
+    </div>
+    <iframe id="test-iframe" width="100%" height="300px"></iframe>
+
+    <script>
+        // Check cookie on parent page
+        const parentCookieResult = document.getElementById('parentCookieResult');
+        const hasCookie = document.cookie.includes('testCookie');
+        parentCookieResult.textContent = `Parent page cookie status: ${hasCookie ? 'Cookie is present' : 'Cookie is not present'}`;
+
+        // Set iframe URL based on iframe hostname parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const iframeHostname = urlParams.get('iframeHostname') || 'sub.example.test';
+        const iframeUrl = `http://${iframeHostname}/iframe`;
+        document.getElementById('test-iframe').src = iframeUrl;
+
+        // Listen for messages from iframe
+        window.addEventListener('message', (event) => {
+            if (event.origin === `http://${iframeHostname}`) {
+                console.log('Message from iframe:', event.data);
+            }
+        });
+    </script>
+</body>
+</html>
